@@ -1,5 +1,46 @@
-from variables import *
-from utils import *
+
+
+# Begin variables.py
+import os
+from datetime import date
+
+USER            = os.getlogin()
+APPLICATION_CMD = "hyprctl activeworkspace -j"
+TAB_CMD         = "hyprctl clients -j"
+TODAY           = str(date.today())
+BASE_DIR        = f"/home/{USER}/.config/hypr/hyprmonitor"
+POLLING_RATE    = 1         # in seconds
+# End variables.py
+
+# Begin utils.py
+import subprocess
+
+# fetch command output from shell
+def execute_fetch(cmd):
+    try:
+        process = subprocess.run(cmd, capture_output=True, 
+                                 text=True, shell=True, check=True)
+        output = process.stdout.strip()
+        return output
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {cmd}")
+        print(f"Exit code: {e.returncode}")
+        print(f"Error output: {e.stderr.strip()}")
+        return ""
+    
+def format_time(num):
+    hrs = num//3600
+    mins = ((num)//60)%60
+    return [hrs, mins, str(hrs) + "h ", str(mins) + "m"]
+
+# just monika
+def execute(cmd):
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Command failed with exit code {e.returncode}")
+# End utils.py
+
 import sys
 import json
 
@@ -22,13 +63,26 @@ args = sys.argv
 # |_|  \__,_|_| |_|\___|\__|_|\___/|_| |_|___/  #
 #################################################
 
-def application_search():
-    hrs = 0
+def sep():
     cols = execute_fetch("tput cols")
     print("-"*int(cols))
-    e = execute_fetch(f'py reader -l 1000| grep -i "{args[2]}"')
+    return cols
+
+def application_search():
+    if len(args) < 3:
+        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'Usage: reader.py -a application_name'")
+        return
+    
+    app = args[2]
+    hrs = 0
+    
+    # base statistics table 
+    sep()
+    e = execute_fetch(f'py reader -l 1000| grep -i "{app}"')
     print(e)
-    print("-"*int(cols))
+    sep()
+    
+    # total time calculation bs
     lst = e.split('\n')
     for i in lst:
         time = i[-2:-10:-1].strip().split()
@@ -36,6 +90,7 @@ def application_search():
         hrs += int(time[1][1:][::-1])
     hrs += mins // 60
     mins = mins % 60
+    
     print(f"\033[34;1mTotal Time: {hrs}h {mins}m\033[m")
 
 def list_tabs():
@@ -43,9 +98,7 @@ def list_tabs():
         with open(f"{BASE_DIR}/apps.json", "r") as file:
             a = json.load(file)
         a = dict(sorted(a.items(), key = lambda item: item[1], reverse=True))
-        cols = execute_fetch("tput cols")
-        print("-"*int(cols))
-        flag = False
+        cols = sep()
         try:
             number_of_results = int(args[2])
         except:
@@ -62,11 +115,15 @@ def list_tabs():
                 print(timer, "|")
             if(counter == number_of_results):
                 break
-        print("-"*int(cols))
+        sep()
     except:
-        execute("notify-send 'log file not found, try running monitor first'")
+        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
 
 def date_search():
+    if len(args) < 3:
+        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'Usage: reader.py -d YYYY-MM-DD'")
+        return
+
     date = args[2]
     print(f"fetching records from {date}")
     print("Enter \n 1. to view window stats \n 2. to view all application stats: ", end = "")
@@ -75,8 +132,7 @@ def date_search():
         try:
             with open(f"{BASE_DIR}/all_{date}.json", "r") as file:
                 print()
-                cols = execute_fetch("tput cols")
-                print("-"*int(cols))
+                cols = sep()
                 a = json.load(file)
                 a = dict(sorted(a.items(), key = lambda item: item[1], reverse=True))
                 for i in a:
@@ -84,9 +140,9 @@ def date_search():
                     print("|", i, end = "")
                     print(" "*(int(cols)-len(i)-len(timer) - 5), end = "")
                     print(timer, "|")
-                print("-"*int(cols))
+                sep()
         except:
-            execute("notify-send 'log file not found, check your date, should be YYYY-MM-DD'")
+            execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
 
     elif choice == 2:
         try:
@@ -94,9 +150,7 @@ def date_search():
                 print()
                 a = json.load(file)
                 a = dict(sorted(a.items(), key = lambda item: item[1], reverse=True))
-                cols = execute("tput cols")
-                print("-"*int(cols))
-                flag = False
+                cols = sep()
                 for i in a:
                     timer = str(a[i]//3600)+"h" + " " + str((a[i]//60)%60)+"m"
                     if("0h 0m" in timer):
@@ -105,34 +159,34 @@ def date_search():
                         print("|", i,end = "")
                         print(" "*(int(cols)-len(i)-len(timer) - 5), end = "")
                         print(timer, "|")
-                print("-"*int(cols))
+                sep()
         except:
-            execute("notify-send 'log file not found, check your date, should be YYYY-MM-DD'")
+            execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
     else:
         print("bro what")
 
 def default_args():
     try:
         with open(f"{BASE_DIR}/all.json", "r") as file:
-            a = json.load(file)
-        print()
-        cols = execute_fetch("tput cols")
-        print("-"*int(cols))
-        a = dict(sorted(a.items(), key = lambda item: item[1], reverse=True))
+            json_obj = json.load(file)
+        json_obj = dict(sorted(json_obj.items(), key = lambda item: item[1], reverse=True))
         hrs = 0
         mins = 0
-        for i in a:
-            time_lst = format_time(a[i])
+
+
+        cols = sep()
+        for i in json_obj:
+            time_lst = format_time(json_obj[i])
             hrs += time_lst[0]
             mins += time_lst[1]
             timer = time_lst[2]
             print("|", i, end = "")
             print(" "*(int(cols)-len(i)-len(timer) - 5), end = "")
             print(timer, "|")
-        
-        print("-"*int(cols))
+        sep()
+
     except:
-        execute("notify-send 'log file not found, try running monitor first'")
+        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
 
 
 #####################################
@@ -143,7 +197,6 @@ def default_args():
 # |_|  \___|\__,_|\__,_|\___|_|     #
 #####################################
 
-print(args)
 if len(args) == 1:
     default_args()
 elif args[1] == '-l':
