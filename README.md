@@ -12,6 +12,125 @@ It is shipped with a systemd service, so the user can either have the monitor mo
 
 (yes this is a continuation of the ssm project from last summer, [ssm](https://github.com/kio42069/ssm))
 
+# Motivation
+
+# Screenshots
+![2024-06-07-214656_hyprshot](https://github.com/kio42069/ssm/assets/62372847/da911509-baae-4fc5-8473-ce25f8d6a042)
+
+# Installation guide
+- Clone the repository
+```
+git clone https://github.com/kio42069/hyprmonitor
+```
+- Run `make` to build the scripts and automatically store them in `/dist` folder
+- The scripts will be monitor.py and reader.py 
+- Store them in any location on your path to directly call from anywhere
+```
+echo $path                           # to check which all directories are in your path variable
+cp monitor.py /home/$USER/.local/bin # example directory
+cp reader.py /usr/local/bin          # another example directory
+```
+
+# Usage
+- Start by running `monitor.py` to start logging data. For now, there is no systemd service, so use tmux for launching, or enter `exec-once=monitor.py` in your hyprland.conf
+- To check your statistics in a beautified way, run `reader.py`
+- ### Flags
+  - `reader.py -l` : to list out just aplications and their time consumed
+  - `reader.py -l n` : to list out the top n entries only (n -> integer) 
+  - `reader.py -d YYYY-MM-DD` : to fetch logs from a certain day
+  - `reader.py -a codeforces` : a grep-ified flag, searches up just the keywords from the tabs data, and calculates the total time spent too
+
+# Example
+<details>
+  <summary>./reader.py</summary>
+  
+  ```
+☁  dist [master] ⚡  ./reader.py                                                                    14%
+[Module Reader Loaded]
+--------------------------------------------------------------------------------------------------------
+| Editing hyprmonitor/README.md at master · kio42069/hyprmonitor — Mozilla Firefox               0h 6m |
+| surt@surt:/tmp/hyprmonitor/src                                                                 0h 3m |
+| surt@surt:/tmp/hyprmonitor/dist                                                                0h 2m |
+| reader.py - src - Visual Studio Code                                                           0h 2m |
+| nvim README.md                                                                                 0h 1m |
+| nvim reader.py                                                                                 0h 0m |
+| surt@surt:/tmp/hyprmonitor                                                                     0h 0m |
+| WhatsApp — Mozilla Firefox                                                                     0h 0m |
+| (3) Inbox • Chats — Mozilla Firefox                                                            0h 0m |
+| Touchpad Button Issue Hyprland — Mozilla Firefox                                               0h 0m |
+| • Discord | chaotic survivors — Mozilla Firefox                                                0h 0m |
+| Welcome - src - Visual Studio Code                                                             0h 0m |
+| surt@surt:~                                                                                    0h 0m |
+| Inbox - surat22517@iiitd.ac.in - IIIT Delhi Mail — Mozilla Firefox                             0h 0m |
+| GitHub Student Developer Pack - GitHub Education — Mozilla Firefox                             0h 0m |
+| Why Use .NET — Mozilla Firefox                                                                 0h 0m |
+| touchpad buttons dont work hyprland - Google Search — Mozilla Firefox                          0h 0m |
+| surt@surt:/tmp                                                                                 0h 0m |
+| ./monitor.py                                                                                   0h 0m |
+| Creating an MVC CRUD app, part 1 | LinkedIn Learning — Mozilla Firefox                         0h 0m |
+| ./reader.py -a firefox                                                                         0h 0m |
+| surt@surt:/tmp/ssm                                                                             0h 0m |
+| src - Visual Studio Code                                                                       0h 0m |
+--------------------------------------------------------------------------------------------------------
+```
+</details>
+<details>
+  <summary>./reader.py -l</summary>
+  
+```
+☁  dist [master] ⚡  ./reader.py -l                                                                 14%
+[Module Reader Loaded]
+--------------------------------------------------------------------------------------------------------
+| firefox                                                                                        0h 7m |
+| Alacritty                                                                                      0h 6m |
+| Code                                                                                           0h 2m |
+--------------------------------------------------------------------------------------------------------
+☁  dist [master] ⚡  ./reader.py -l 2                                                               14%
+[Module Reader Loaded]
+--------------------------------------------------------------------------------------------------------
+| firefox                                                                                        0h 7m |
+| Alacritty                                                                                      0h 6m |
+--------------------------------------------------------------------------------------------------------
+```
+</details>
+
+<details>
+  <summary>./reader.py -a firefox</summary>
+  
+```
+☁  dist [master] ⚡  ./reader.py -a firefox                                                         14%
+[Module Reader Loaded]
+--------------------------------------------------------------------------------------------------------
+| Editing hyprmonitor/README.md at master · kio42069/hyprmonitor — Mozilla Firefox               0h 6m |
+| WhatsApp — Mozilla Firefox                                                                     0h 0m |
+| (3) Inbox • Chats — Mozilla Firefox                                                            0h 0m |
+| Touchpad Button Issue Hyprland — Mozilla Firefox                                               0h 0m |
+| • Discord | chaotic survivors — Mozilla Firefox                                                0h 0m |
+| Inbox - surat22517@iiitd.ac.in - IIIT Delhi Mail — Mozilla Firefox                             0h 0m |
+| GitHub Student Developer Pack - GitHub Education — Mozilla Firefox                             0h 0m |
+| Why Use .NET — Mozilla Firefox                                                                 0h 0m |
+| touchpad buttons dont work hyprland - Google Search — Mozilla Firefox                          0h 0m |
+| Creating an MVC CRUD app, part 1 | LinkedIn Learning — Mozilla Firefox                         0h 0m |
+| ./reader.py -a firefox                                                                         0h 0m |
+
+Total Time: 0h 6m
+```
+</details>
+<details>
+  <summary>./reader.py -d 2025-05-21</summary>
+  
+```
+☁  dist [master] ⚡  ./reader.py -d 2025-05-21                                                      14%
+[Module Reader Loaded]
+fetching records from 2025-05-21
+Enter
+ 1. to view window stats
+ 2. to view all application stats: 1
+ok
+☁  dist [master] ⚡     
+```
+</details>
+
 # Development Roadmap
 - [x] Backend
 - [x] TUI / CLI based user interaction
@@ -27,3 +146,6 @@ It is shipped with a systemd service, so the user can either have the monitor mo
 - [ ] Productivity mode: native to the desktop application, will use the provided notification daemon to help with productivity
 - [x] JSON support: user can take raw collected data and use any online LLM for analysis
 - [ ] Locally hosted LLM based statistics analysis and suggestion generator
+
+# Credits
+Created by <b>kiddo42069</b>

@@ -40,7 +40,7 @@ def application_search():
     hrs = 0
     
     # base statistics table
-    e = execute_fetch(f'python reader.py -l 1000| grep -i "{app}"')
+    e = execute_fetch(f'python reader.py | grep -i "{app}"')
     
     if e == "":
         execute(f"hyprctl notify 2 4000 'rgb(b2d4fa)' 'Application: [{app}] not found'")
@@ -54,6 +54,7 @@ def application_search():
     lst = e.split('\n')
     for i in lst:
         time = i[-2:-10:-1].strip().split()
+        print(i)
         mins += int(time[0][1:][::-1])
         hrs += int(time[1][1:][::-1])
     hrs += mins // 60
@@ -138,19 +139,13 @@ def default_args():
         with open(f"{BASE_DIR}/all.json", "r") as file:
             json_obj = json.load(file)
         json_obj = dict(sorted(json_obj.items(), key = lambda item: item[1], reverse=True))
-        hrs = 0
-        mins = 0
-
 
         cols = sep()
         for i in json_obj:
-            time_lst = format_time(json_obj[i])
-            hrs += time_lst[0]
-            mins += time_lst[1]
-            timer = time_lst[2]
+            time_lst = format_time(json_obj[i])[2::]
             print("|", i, end = "")
-            print(" "*(int(cols)-len(i)-len(timer) - 5), end = "")
-            print(timer, "|")
+            print(" "*(int(cols)-len(i)-len(time_lst[0])-len(time_lst[1]) - 4), end = "")
+            print(time_lst[0]+time_lst[1], "|")
         sep()
 
     except:
