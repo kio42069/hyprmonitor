@@ -13,6 +13,7 @@ It is shipped with a systemd service, so the user can either have the monitor mo
 (yes this is a continuation of the ssm project from last summer, [ssm](https://github.com/kio42069/ssm))
 
 # Motivation
+I wanted to use a digital time tracking tool, something similar to ActivityWatch, or the one called digital wellbeing on android. The issue with AcitivityWatch was that it has absolute trash wayland compatibility, atleast after using it for a few days on Hyprland I figured so. Since its not a very hard task, I decided to start building one myself, starting with a simple cli interaction, building on to make a web based ui similar to what I observed on ActivityWatch, fixing and tweaking ui elements according to what I deem more comfortable for the user 
 
 # Screenshots
 ![2024-06-07-214656_hyprshot](https://github.com/kio42069/ssm/assets/62372847/da911509-baae-4fc5-8473-ce25f8d6a042)
