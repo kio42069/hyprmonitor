@@ -10,6 +10,8 @@ It logs the system data as a python dictionary object, the next version will be 
 Future updates will include a user interface, both web-based and a standable native QT application, with graphs for visualisation, and filters for date, time, tags, and more~
 It is shipped with a systemd service, so the user can either have the monitor module in their autostart scripts, or have systemd manage the service
 
+(yes this is a continuation of the ssm project from last summer, [ssm](https://github.com/kio42069/ssm))
+
 # Development Roadmap
 - [x] Backend
 - [x] TUI / CLI based user interaction
