@@ -8,9 +8,9 @@ def execute_fetch(cmd):
         output = process.stdout.strip()
         return output
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command: {cmd}")
-        print(f"Exit code: {e.returncode}")
-        print(f"Error output: {e.stderr.strip()}")
+        # print(f"Error executing command: {cmd}")
+        # print(f"Exit code: {e.returncode}")
+        # print(f"Error output: {e.stderr.strip()}")
         return ""
     
 def format_time(num):

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import os
 
 SRC_DIR = "src"
@@ -7,6 +8,7 @@ FILES_TO_INLINE = ["variables.py", "utils.py"]
 
 START_MARKER = "#$$$"
 END_MARKER = "#@@@"
+SHEBANG = "#!/usr/bin/python"
 
 def read_file(path):
     with open(path, "r") as f:
@@ -28,9 +30,13 @@ def process_script(filename):
     _, _, post = rest.partition(END_MARKER)
 
     inlined_code = extract_replacement_code()
-    new_content = f"{pre.strip()}\n\n{inlined_code}\n\n{post.lstrip()}"
+    combined = f"{pre.strip()}\n\n{inlined_code}\n\n{post.lstrip()}"
 
-    return new_content
+    # Add shebang at the top, avoiding duplicate shebangs
+    if not combined.startswith("#!"):
+        combined = f"{SHEBANG}\n\n{combined}"
+
+    return combined
 
 def build():
     os.makedirs(OUT_DIR, exist_ok=True)

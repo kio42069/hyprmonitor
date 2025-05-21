@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 
 
 # Begin variables.py
@@ -23,9 +25,9 @@ def execute_fetch(cmd):
         output = process.stdout.strip()
         return output
     except subprocess.CalledProcessError as e:
-        print(f"Error executing command: {cmd}")
-        print(f"Exit code: {e.returncode}")
-        print(f"Error output: {e.stderr.strip()}")
+        # print(f"Error executing command: {cmd}")
+        # print(f"Exit code: {e.returncode}")
+        # print(f"Error output: {e.stderr.strip()}")
         return ""
     
 def format_time(num):
@@ -70,15 +72,21 @@ def sep():
 
 def application_search():
     if len(args) < 3:
-        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'Usage: reader.py -a application_name'")
+        execute("hyprctl notify 2 4000 'rgb(b2d4fa)' 'Usage: reader.py -a application_name'")
         return
     
     app = args[2]
+    mins = 0
     hrs = 0
     
-    # base statistics table 
+    # base statistics table
+    e = execute_fetch(f'python reader.py -l 1000| grep -i "{app}"')
+    
+    if e == "":
+        execute(f"hyprctl notify 2 4000 'rgb(b2d4fa)' 'Application: [{app}] not found'")
+        return
+
     sep()
-    e = execute_fetch(f'py reader -l 1000| grep -i "{app}"')
     print(e)
     sep()
     
@@ -106,22 +114,22 @@ def list_tabs():
         counter = 0
         for i in a:
             counter += 1
-            timer = format_time(a[i])[2]
+            timer = format_time(a[i])[2::]
             if("0h 0m" in timer):
                 continue
             else:
                 print("|", i,end = "")
-                print(" "*(int(cols)-len(i)-len(timer) - 5), end = "")
-                print(timer, "|")
+                print(" "*(int(cols)-len(i)-len(timer[0])-len(timer[1]) - 4), end = "")
+                print(timer[0]+timer[1], "|")
             if(counter == number_of_results):
                 break
         sep()
     except:
-        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
+        execute("hyprctl notify 4 4000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
 
 def date_search():
     if len(args) < 3:
-        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'Usage: reader.py -d YYYY-MM-DD'")
+        execute("hyprctl notify 2 4000 'rgb(b2d4fa)' 'Usage: reader.py -d YYYY-MM-DD'")
         return
 
     date = args[2]
@@ -142,7 +150,7 @@ def date_search():
                     print(timer, "|")
                 sep()
         except:
-            execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
+            execute("hyprctl notify 2 4000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
 
     elif choice == 2:
         try:
@@ -161,7 +169,7 @@ def date_search():
                         print(timer, "|")
                 sep()
         except:
-            execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
+            execute("hyprctl notify 2 4000 'rgb(b2d4fa)' 'log file not found, check your date, should be YYYY-MM-DD'")
     else:
         print("bro what")
 
@@ -186,7 +194,7 @@ def default_args():
         sep()
 
     except:
-        execute("hyprctl notify 5 2000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
+        execute("hyprctl notify 2 4000 'rgb(b2d4fa)' 'log file not found, try running monitor first'")
 
 
 #####################################
