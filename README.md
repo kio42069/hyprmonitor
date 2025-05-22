@@ -59,7 +59,6 @@ cp reader.py /usr/local/bin          # another example directory
 | WhatsApp — Mozilla Firefox                                                                     0h 0m |
 | (3) Inbox • Chats — Mozilla Firefox                                                            0h 0m |
 | Touchpad Button Issue Hyprland — Mozilla Firefox                                               0h 0m |
-| • Discord | chaotic survivors — Mozilla Firefox                                                0h 0m |
 | Welcome - src - Visual Studio Code                                                             0h 0m |
 | surt@surt:~                                                                                    0h 0m |
 | Inbox - surat22517@iiitd.ac.in - IIIT Delhi Mail — Mozilla Firefox                             0h 0m |
@@ -106,7 +105,6 @@ cp reader.py /usr/local/bin          # another example directory
 | WhatsApp — Mozilla Firefox                                                                     0h 0m |
 | (3) Inbox • Chats — Mozilla Firefox                                                            0h 0m |
 | Touchpad Button Issue Hyprland — Mozilla Firefox                                               0h 0m |
-| • Discord | chaotic survivors — Mozilla Firefox                                                0h 0m |
 | Inbox - surat22517@iiitd.ac.in - IIIT Delhi Mail — Mozilla Firefox                             0h 0m |
 | GitHub Student Developer Pack - GitHub Education — Mozilla Firefox                             0h 0m |
 | Why Use .NET — Mozilla Firefox                                                                 0h 0m |
