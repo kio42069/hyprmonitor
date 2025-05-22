@@ -5,17 +5,19 @@ A simple tool to track application usage time, with visualisation support
 Hyprmonitor is a python based application, currently in its CLI/TUI stage. 
 Users can view their app wise usage data, tab wise usage data, and also look up the logs of a certain date for both the supported tabs
 Logs are available on a per-day basis, stored as serialised dictionary objects in a logs directory
+
 It logs the system data as a python dictionary object, the next version will be ported to a JSON logfile based system. That way, users can export the raw data and do their own personal analysis 
 
 Future updates will include a user interface, both web-based and a standable native QT application, with graphs for visualisation, and filters for date, time, tags, and more~
-It is shipped with a systemd service, so the user can either have the monitor module in their autostart scripts, or have systemd manage the service
+
+It will be shipped with a systemd service, so the user can either have the monitor module in their autostart scripts, or have systemd manage the service
 
 (yes this is a continuation of the ssm project from last summer, [ssm](https://github.com/kio42069/ssm))
 
 # Motivation
-I wanted to use a digital time tracking tool, something similar to ActivityWatch, or the one called digital wellbeing on android. The issue with AcitivityWatch was that it has absolute trash wayland compatibility, atleast after using it for a few days on Hyprland I figured so. Since its not a very hard task, I decided to start building one myself, starting with a simple cli interaction, building on to make a web based ui similar to what I observed on ActivityWatch, fixing and tweaking ui elements according to what I deem more comfortable for the user 
+I wanted to use a digital time tracking tool, something similar to ActivityWatch, or the one called digital wellbeing on android. The issue with AcitivityWatch was that it has absolute trash wayland compatibility, atleast after using it for a few days on Hyprland I figured so. Since its not a very hard task, I decided to start building one myself, starting with a simple cli interaction, building on to make a web based UI similar to what I observed on ActivityWatch, fixing and tweaking UI elements according to what I feel are more comfortable for the user 
 
-# Screenshots
+# Screenshot
 ![2024-06-07-214656_hyprshot](https://github.com/kio42069/ssm/assets/62372847/da911509-baae-4fc5-8473-ce25f8d6a042)
 
 # Installation guide
@@ -25,12 +27,18 @@ git clone https://github.com/kio42069/hyprmonitor
 ```
 - Run `make` to build the scripts and automatically store them in `/dist` folder
 - The scripts will be monitor.py and reader.py 
-- Store them in any location on your path to directly call from anywhere
+- The `Makefile` also puts the files in your path automatically, so they will be globally accessible
+- ~~Store them in any location on your path to directly call from anywhere~~
+<details>
+<summary>PATH guide</summary>
+
 ```
 echo $path                           # to check which all directories are in your path variable
 cp monitor.py /home/$USER/.local/bin # example directory
 cp reader.py /usr/local/bin          # another example directory
 ```
+</details>
+
 
 # Usage
 - Start by running `monitor.py` to start logging data. For now, there is no systemd service, so use tmux for launching, or enter `exec-once=monitor.py` in your hyprland.conf
@@ -43,10 +51,10 @@ cp reader.py /usr/local/bin          # another example directory
 
 # Example
 <details>
-  <summary>./reader.py</summary>
+  <summary>reader.py</summary>
   
   ```
-☁  dist [master] ⚡  ./reader.py                                                                    14%
+☁  dist [master] ⚡  reader.py                                                                    14%
 [Module Reader Loaded]
 --------------------------------------------------------------------------------------------------------
 | Editing hyprmonitor/README.md at master · kio42069/hyprmonitor — Mozilla Firefox               0h 6m |
@@ -75,17 +83,17 @@ cp reader.py /usr/local/bin          # another example directory
 ```
 </details>
 <details>
-  <summary>./reader.py -l</summary>
+  <summary>reader.py -l</summary>
   
 ```
-☁  dist [master] ⚡  ./reader.py -l                                                                 14%
+☁  dist [master] ⚡  reader.py -l                                                                 14%
 [Module Reader Loaded]
 --------------------------------------------------------------------------------------------------------
 | firefox                                                                                        0h 7m |
 | Alacritty                                                                                      0h 6m |
 | Code                                                                                           0h 2m |
 --------------------------------------------------------------------------------------------------------
-☁  dist [master] ⚡  ./reader.py -l 2                                                               14%
+☁  dist [master] ⚡  reader.py -l 2                                                               14%
 [Module Reader Loaded]
 --------------------------------------------------------------------------------------------------------
 | firefox                                                                                        0h 7m |
@@ -95,10 +103,10 @@ cp reader.py /usr/local/bin          # another example directory
 </details>
 
 <details>
-  <summary>./reader.py -a firefox</summary>
+  <summary>reader.py -a firefox</summary>
   
 ```
-☁  dist [master] ⚡  ./reader.py -a firefox                                                         14%
+☁  dist [master] ⚡  reader.py -a firefox                                                         14%
 [Module Reader Loaded]
 --------------------------------------------------------------------------------------------------------
 | Editing hyprmonitor/README.md at master · kio42069/hyprmonitor — Mozilla Firefox               0h 6m |
@@ -111,15 +119,16 @@ cp reader.py /usr/local/bin          # another example directory
 | touchpad buttons dont work hyprland - Google Search — Mozilla Firefox                          0h 0m |
 | Creating an MVC CRUD app, part 1 | LinkedIn Learning — Mozilla Firefox                         0h 0m |
 | ./reader.py -a firefox                                                                         0h 0m |
+--------------------------------------------------------------------------------------------------------
 
 Total Time: 0h 6m
 ```
 </details>
 <details>
-  <summary>./reader.py -d 2025-05-21</summary>
+  <summary>reader.py -d 2025-05-21</summary>
   
 ```
-☁  dist [master] ⚡  ./reader.py -d 2025-05-21                                                      14%
+☁  dist [master] ⚡  reader.py -d 2025-05-21                                                      14%
 [Module Reader Loaded]
 fetching records from 2025-05-21
 Enter
@@ -138,13 +147,13 @@ ok
 - [ ] Windows Port
 
 # Featureset
+- [x] JSON support: user can take raw collected data and use any online LLM for analysis
 - [ ] Pie chart and bar graphs based visualisation
 - [ ] Two tabs: 1 for application level stats, tab 2 for window level stats (more spammy == gross)
 - [ ] Tags support:  sort applications by hardcoded types - productivity, gaming, development, miscellaneous 
 - [ ] Browser extension: to track your browser activity as well
 - [ ] Productivity mode: native to the desktop application, will use the provided notification daemon to help with productivity
-- [x] JSON support: user can take raw collected data and use any online LLM for analysis
 - [ ] Locally hosted LLM based statistics analysis and suggestion generator
 
 # Credits
-Created by <b>kiddo42069</b>
+Created by <b>kiddo42069!!</b>
