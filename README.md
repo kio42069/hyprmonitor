@@ -31,7 +31,7 @@ flowchart LR
 ```
 
 ```mermaid
-flowchart LR
+flowchart TD
   F[reader.py] --> |Basic| G[./reader.py]
   F[reader.py] --> |Applications + Total Time + Optional : top n entries| H[./reader.py -l]
   F[reader.py] --> |Top n entries| I[./reader.py -l n]
