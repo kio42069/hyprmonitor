@@ -21,6 +21,23 @@ I wanted to use a digital time tracking tool, something similar to ActivityWatch
 ![2024-06-07-214656_hyprshot](https://github.com/kio42069/ssm/assets/62372847/da911509-baae-4fc5-8473-ce25f8d6a042)
 
 # Installation guide
+
+```mermaid
+flowchart LR
+  A[clone repo] --> B{make}
+  B --> C[dist/reader.py]
+  B --> D[dist/monitor.py]
+  C --> E[./monitor.py]
+```
+
+```mermaid
+flowchart LR
+  F[reader.py] --> |Basic| G[./reader.py]
+  F[reader.py] --> |Applications + Total Time + Optional : top n entries| H[./reader.py -l]
+  F[reader.py] --> |Top n entries| I[./reader.py -l n]
+  F[reader.py] --> |Fetch from date| J[./reader.py -d YYYY-MM-DD]
+  F[reader.py] --> |Search keyword + total time spent| K[./reader.py -a codeforces]
+```
 - Clone the repository
 ```
 git clone https://github.com/kio42069/hyprmonitor
