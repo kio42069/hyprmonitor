@@ -23,6 +23,11 @@ I wanted to use a digital time tracking tool, something similar to ActivityWatch
 # Installation guide
 
 ```mermaid
+---
+config:
+  look: neo
+  theme: neo-dark
+---
 flowchart LR
   A[clone repo] --> B{make}
   B --> C[dist/reader.py]
@@ -31,10 +36,15 @@ flowchart LR
 ```
 
 ```mermaid
+---
+config:
+  look: neo
+  theme: neo-dark
+---
 flowchart TD
   F[reader.py] --> |Basic| G[./reader.py]
-  F[reader.py] --> |Applications + Total Time + Optional : top n entries| H[./reader.py -l]
-  F[reader.py] --> |Top n entries| I[./reader.py -l n]
+  F[reader.py] --> |apps| H[./reader.py -l n]
+  F[reader.py] --> |optional: n| H
   F[reader.py] --> |Fetch from date| J[./reader.py -d YYYY-MM-DD]
   F[reader.py] --> |Search keyword + total time spent| K[./reader.py -a codeforces]
 ```
