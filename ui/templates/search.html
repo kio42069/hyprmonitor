@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyprmonitor - Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Search Results</h1>
+        <form action="/search" method="get" class="mb-4">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="text" name="q" value="{{ query }}" placeholder="Search application/tab">
+                </div>
+                <div class="control">
+                    <button class="button is-info" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        {% if results %}
+        <table class="table is-striped is-fullwidth">
+            <thead><tr><th>Name</th><th>Time</th></tr></thead>
+            <tbody>
+            {% for k, v in results.items() %}
+                <tr><td>{{ k }}</td><td>{{ (v//3600) }}h {{ ((v//60)%60) }}m</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No results found for "{{ query }}".</p>
+        {% endif %}
+        <a href="/" class="button is-light mt-4">Back to Dashboard</a>
+    </div>
+</section>
+</body>
+</html>

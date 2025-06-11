@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyprmonitor - Date View</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Hyprmonitor - Logs by Date</h1>
+        <form action="/date" method="get" class="mb-4">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="date" name="date" value="{{ date }}">
+                </div>
+                <div class="control">
+                    <button class="button is-link" type="submit">View</button>
+                </div>
+            </div>
+        </form>
+        {% if date %}
+        <h2 class="subtitle">Tab/Window Usage for {{ date }}</h2>
+        {% if all_data %}
+        <table class="table is-striped is-fullwidth">
+            <thead><tr><th>Tab/Window</th><th>Time</th></tr></thead>
+            <tbody>
+            {% for k, v in all_data|dictsort(false, 'value')|reverse %}
+                <tr><td>{{ k }}</td><td>{{ (v//3600) }}h {{ ((v//60)%60) }}m</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="/download/all_{{ date }}.json" class="button is-small is-light">Download all_{{ date }}.json</a>
+        {% else %}
+        <p>No tab/window data found for this date.</p>
+        {% endif %}
+        <h2 class="subtitle mt-5">Application Usage for {{ date }}</h2>
+        {% if apps_data %}
+        <table class="table is-striped is-fullwidth">
+            <thead><tr><th>Application</th><th>Time</th></tr></thead>
+            <tbody>
+            {% for k, v in apps_data|dictsort(false, 'value')|reverse %}
+                <tr><td>{{ k }}</td><td>{{ (v//3600) }}h {{ ((v//60)%60) }}m</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="/download/apps_{{ date }}.json" class="button is-small is-light">Download apps_{{ date }}.json</a>
+        {% else %}
+        <p>No application data found for this date.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+</section>
+</body>
+</html>

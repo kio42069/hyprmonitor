@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hyprmonitor Web UI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">Hyprmonitor Dashboard</h1>
+        <form action="/search" method="get" class="mb-4">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="text" name="q" placeholder="Search application/tab">
+                </div>
+                <div class="control">
+                    <button class="button is-info" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        <form action="/date" method="get" class="mb-4">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="date" name="date">
+                </div>
+                <div class="control">
+                    <button class="button is-link" type="submit">View by Date</button>
+                </div>
+            </div>
+        </form>
+        <h2 class="subtitle">Current Tab/Window Usage</h2>
+        {% if all_data %}
+        <table class="table is-striped is-fullwidth">
+            <thead><tr><th>Tab/Window</th><th>Time</th></tr></thead>
+            <tbody>
+            {% for k, v in all_data|dictsort(false, 'value')|reverse %}
+                <tr><td>{{ k }}</td><td>{{ (v//3600) }}h {{ ((v//60)%60) }}m</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="/download/all.json" class="button is-small is-light">Download all.json</a>
+        {% else %}
+        <p>No tab/window data found.</p>
+        {% endif %}
+        <h2 class="subtitle mt-5">Current Application Usage</h2>
+        {% if apps_data %}
+        <div class="box mb-5">
+            <canvas id="appPieChart" width="400" height="200"></canvas>
+        </div>
+        <table class="table is-striped is-fullwidth">
+            <thead><tr><th>Application</th><th>Time</th></tr></thead>
+            <tbody>
+            {% for k, v in apps_data|dictsort(false, 'value')|reverse %}
+                <tr><td>{{ k }}</td><td>{{ (v//3600) }}h {{ ((v//60)%60) }}m</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="/download/apps.json" class="button is-small is-light">Download apps.json</a>
+        {% else %}
+        <p>No application data found.</p>
+        {% endif %}
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if apps_data %}
+<script>
+    // Use tojson only, as Flask's tojson is safe for JS embedding
+    const appPairs = {{ apps_data|dictsort(false, 'value')|reverse|list|tojson }};
+    const appLabels = appPairs.map(function(x) { return x[0]; });
+    const appData = appPairs.map(function(x) { return x[1]; });
+    const appColors = [
+        '#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc949',
+        '#af7aa1', '#ff9da7', '#9c755f', '#bab0ab', '#b07aa1', '#7aafff',
+        '#ffb347', '#b0ffb3', '#ffb3b3', '#b3b3ff', '#ffd700', '#00bfff',
+        '#ff6347', '#4682b4', '#32cd32', '#ff69b4', '#8a2be2', '#00ced1', '#ffa500'
+    ];
+    const ctx = document.getElementById('appPieChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: appLabels,
+            datasets: [{
+                data: appData,
+                backgroundColor: appColors,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: 'Application Usage Distribution'
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+</body>
+</html>
